@@ -253,11 +253,11 @@ local function overpenDamage(unitID, unitDefID, featureID, damage, projID, attac
         damage = damage * damageLeft
         damageBase = damageBase * damageLeft
         damageLeft = damageLeft - health / damageBase - weaponData.penalty
-    end
 
-    if weaponData.expDefID and damageLeft <= explodeThreshold then
-        explodeDriver(projID, weaponData.expDefID, attackID, unitID, featureID)
-        return damage
+        if weaponData.expDefID and damageLeft <= explodeThreshold then
+            explodeDriver(projID, weaponData.expDefID, attackID, unitID, featureID)
+            return damage
+        end
     end
 
     if damageBase > health and damageBase >= healthMax * damageThreshold then
@@ -267,6 +267,9 @@ local function overpenDamage(unitID, unitDefID, featureID, damage, projID, attac
             end
             respawn[projID] = driver
         end
+        return damage
+    elseif weaponData.expDefID then
+        explodeDriver(projID, weaponData.expDefID, attackID, unitID, featureID)
         return damage
     end
 
